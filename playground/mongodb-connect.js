@@ -6,7 +6,7 @@ MongoClient.connect('mongodb://localhost:27017/Todos', (err, db) => {
     }
     console.log('Server connected successfully');
 
-    /*
+    //Todos table
     db.collection('todos').insertOne({
         text: 'Somethings never change',
         completed: false
@@ -16,7 +16,9 @@ MongoClient.connect('mongodb://localhost:27017/Todos', (err, db) => {
         }
         console.log(JSON.stringify(res.ops, undefined, 4));
     });
-    */
+
+    /*
+    //User table
     db.collection('Users').insertOne({
         name: 'Lohith',
         age: 26,
@@ -27,6 +29,7 @@ MongoClient.connect('mongodb://localhost:27017/Todos', (err, db) => {
         }
         console.log(JSON.stringify(res.ops, undefined, 4));
     });
+    */
 
     db.close();
 });
