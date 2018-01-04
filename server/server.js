@@ -12,6 +12,7 @@ var app = express();
 //declaring middleware - to parse our req. body as json
 app.use(bodyParser.json());
 
+//POST method
 app.post('/todos', (req, res) => {
     //console.log(req.body);
     var todo = new Todo({
@@ -24,7 +25,16 @@ app.post('/todos', (req, res) => {
     });
 });
 
-app.listen('3000', () => {
+//GET method
+app.get('/todos', (req, res) => {
+    Todo.find().then((todos) => {
+        res.send({todos});
+    }, (err) => {
+        res.status(400).send(err);
+    });
+});
+
+app.listen('3001', () => {
     console.log('Server up in port 3000');
 });
 
