@@ -1,74 +1,29 @@
-const mongoose = require('mongoose');
+const express = require('express');
+//boby-parser is a lib. which helps us to get the req. body data and convert it to object
+const bodyParser = require('body-parser');
 
-//registering with promise
-mongoose.Promise = global.Promise;
-//connecting to db
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+//getting mongoose by ES6 de-structuring
+const {mongoose} = require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-//Todos model
-//declaring a model
-var Todo = mongoose.model('Todo', { //fields and their validations in table
-    text: {
-        type: String,
-        required: true,
-        minlength: 2,
-        trim: true
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    },
-    completedAt: {
-        type: Number,
-        default: null
-    }
+//creating a express application
+var app = express();
+//declaring middleware - to parse our req. body as json
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+    //console.log(req.body);
+    var todo = new Todo({
+        text: req.body.text
+    });
+    todo.save().then((doc) => {
+        res.send(doc);
+    }, (err) => {
+        res.status(400).send(err);
+    });
 });
 
-//inserting a record in db using model
-/*
-var newTodo = new Todo({
-    text: 'This is first record'
-});
-
-//saving record in db, here then used as it is promise
-newTodo.save().then((res) => {
-    console.log('Todo saved successfully', res);
-}, (err) => {
-    console.log('Unable to save todo', err);
-});
-*
-
-// creating record with all fields
-var newTodo = new Todo({
-    text:'  Eat lunch  ',
-    //completed: false,  //it have default
-    //completedAt: 456   //it have default
-});
-
-//saving record in db, here then used as it is promise
-newTodo.save().then((res) => {
-    console.log('Todo saved successfully', res);
-}, (err) => {
-    console.log('Unable to save todo', err);
-});
-*/
-
-//Users model
-var User = mongoose.model('Users', {
-    email: {
-        type: String,
-        required: true,
-        minlength: 1,
-        trim: true
-    }
-});
-
-var newUser = new User({
-    email: '  lohithcb7@gmail.com '
-});
-
-newUser.save().then((res) => {
-    console.log('Users added successfully', res);
-}, (err) => {
-    console.log('Unable to save record', err);
+app.listen('3000', () => {
+    console.log('Server up in port 3000');
 });
