@@ -35,26 +35,26 @@ app.get('/todos', (req, res) => {
     });
 });
 
-//GET /todo/123456
+//GET /todo/:id
 app.get('/todos/:id', (req, res) => {
     var id = req.params.id;
     //validate ID
     if (!ObjectID.isValid(id)){
-        res.status(404).send('Invalid ID');
+        res.status(404).send(); //'Invalid ID'
     }
 
     Todo.findById(id).then((todo) => {
         if (!todo){
-            res.status(404).send('No todo found');
+            res.status(404).send(); //'No todo found'
         }
         res.send({todo});
     }).catch((err) => {
-        res.status(400).send(err);
+        res.status(400).send(); //err
     });
 
 });
 
-const port = '3000';
+const port = '3001';
 app.listen(port, () => {
     console.log('Server up in port '+port);
 });
