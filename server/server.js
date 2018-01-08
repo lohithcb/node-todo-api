@@ -8,6 +8,9 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
+//setting PORT for heroku automatically
+const port = process.env.PORT || '3001';
+
 //creating a express application
 var app = express();
 //declaring middleware - to parse our req. body as json
@@ -54,9 +57,9 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
-const port = '3001';
+
 app.listen(port, () => {
-    console.log('Server up in port '+port);
+    console.log(`Server up in port ${port}`);
 });
 
 module.exports = {app};
