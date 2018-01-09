@@ -8,8 +8,7 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
-//setting PORT for heroku automatically
-const port = process.env.PORT || '3001';
+
 
 //creating a express application
 var app = express();
@@ -22,8 +21,8 @@ app.post('/todos', (req, res) => {
     var todo = new Todo({
         text: req.body.text
     });
-    todo.save().then((doc) => {
-        res.send(doc);
+    todo.save().then((todo) => {
+        res.send({todo});
     }, (err) => {
         res.status(400).send(err);
     });
@@ -57,6 +56,27 @@ app.get('/todos/:id', (req, res) => {
 
 });
 
+//DELETE /todos/:id
+app.delete('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send('Invalid ID');
+    }
+    
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo) {
+            res.status(404).send();
+        }
+        res.send(todo);
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
+
+
+//setting PORT for heroku automatically
+const port = process.env.PORT || '3000';
 
 app.listen(port, () => {
     console.log(`Server up in port ${port}`);
