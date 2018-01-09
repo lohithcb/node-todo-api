@@ -14,11 +14,13 @@ const todos = [{
 }];
 
 //this code is run before our test case starts
+/*
 beforeEach((done) => {
     Todo.remove({}).then(() => {
         return Todo.insertMany(todos);
     }).then(() => done());
 });
+*/
 
 /*
 describe('POST /todos', () => {
@@ -102,7 +104,6 @@ describe('GET /todos/:id', () => {
     });
 
 });
-*/
 
 describe('DELETE /todos/:id', () => {
 
@@ -143,3 +144,4 @@ describe('DELETE /todos/:id', () => {
     });
 
 });
+*/

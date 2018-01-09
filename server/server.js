@@ -2,6 +2,7 @@ const express = require('express');
 //boby-parser is a lib. which helps us to get the req. body data and convert it to object
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
+const _ = require('lodash');
 
 //getting mongoose by ES6 de-structuring
 const {mongoose} = require('./db/mongoose');
@@ -74,9 +75,37 @@ app.delete('/todos/:id', (req, res) => {
     });
 });
 
+//PATCH/UPDATE /todo/:id
+app.patch('/todos/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['completed', 'text']);
+
+    if (!ObjectID.isValid(id)) {
+        res.status(404).send('Invalid Id');
+    }
+
+    if (body.completed && _.isBoolean(body.completed)){
+        body.completedAt = new Date().getTime();
+    }else {
+        body.completedAt = null;
+        body.completed = false;
+    }
+
+    //Updating todo
+    Todo.findByIdAndUpdate(id, {$set: body}, {new: true}).then((todo) => {
+        if (!todo) {
+            res.status(404).send('No todo found');
+        }
+        res.send({todo});
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+
+});
+
 
 //setting PORT for heroku automatically
-const port = process.env.PORT || '3000';
+const port = process.env.PORT || '3025';
 
 app.listen(port, () => {
     console.log(`Server up in port ${port}`);
