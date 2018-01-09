@@ -14,13 +14,12 @@ const todos = [{
 }];
 
 //this code is run before our test case starts
-/*
 beforeEach((done) => {
     Todo.remove({}).then(() => {
         return Todo.insertMany(todos);
     }).then(() => done());
 });
-*/
+
 /*
 describe('POST /todos', () => {
 
@@ -75,11 +74,12 @@ describe('GET /todos', () => {
             .end(done());
     });
 });
-*/
+
 describe('GET /todos/:id', () => {
     it('should should return todo doc', (done) => {
+        var hexId = todos[0]._id.toHexString();  //converting ObjectID obj. to String
         request(app)
-            .get(`/todos/${todos[0]._id.toHexString()}`) //converting ObjectID obj. to String
+            .get(`/todos/${hexId}`)
             .expect(200)
             .expect((res) => {
                 expect(res.body.todo.text).toBe(todos[0].text);
@@ -95,6 +95,47 @@ describe('GET /todos/:id', () => {
     });
 
     it('should return 404, for non-object ids', (done) => {
+        request(app)
+            .get('/todos/123')// non-object id
+            .expect(404)
+            .end(done);
+    });
+
+});
+*/
+
+describe('DELETE /todos/:id', () => {
+
+    it('should delete the todo', (done) => {
+        var hexId = todos[1]._id.toHexString();
+
+        request(app)
+            .delete(`/todos/${hexId}`)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo._id).toBe(hexId);
+            })
+            .end((err, res) => {
+                if (err){
+                    return done(err);
+                }
+
+                Todo.findById(hexId).then((todo) => {
+                   expect(todo).toBe(null);
+                   //expect(todo).toNotExist();
+                   done();
+                }).catch((e) => done(e));
+            });
+    });
+
+    it('should return 404 if todo not found', (done) => {
+        request(app)
+            .delete(`/todos/${new ObjectID().toHexString}`) // new valid id
+            .expect(404)
+            .end(done);
+    });
+
+    it('should return 404 for non-object id', (done) => {
         request(app)
             .get('/todos/123')// non-object id
             .expect(404)
