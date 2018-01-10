@@ -10,17 +10,19 @@ const todos = [{
     text: 'this is first todo'
 }, {
     _id: new ObjectID(),
-    text: 'this is second todo'
+    text: 'this is second todo',
+    completed: true,
+    completedAt: 333
 }];
 
 //this code is run before our test case starts
-/*
-beforeEach((done) => {
-    Todo.remove({}).then(() => {
-        return Todo.insertMany(todos);
-    }).then(() => done());
-});
-*/
+//
+// beforeEach((done) => {
+//     Todo.remove({}).then(() => {
+//         return Todo.insertMany(todos);
+//     }).then(() => done());
+// });
+
 
 /*
 describe('POST /todos', () => {
@@ -143,5 +145,37 @@ describe('DELETE /todos/:id', () => {
             .end(done);
     });
 
+});
+
+describe('PATCH /todos/:id', () => {
+    it('should update the todo', (done) => {
+        var hexId = todos[0]._id.toHexString();
+        var postParams = {text: "updated string for first", completed: true};
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send(postParams)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(postParams.text);
+                expect(res.body.todo.completed).toBe(true);
+                //expect(res.body.todo.completedAt).toBeAn('string');
+            })
+            .end(done);
+    });
+
+    it('should clear completedAt when todo is not completed', (done) => {
+        var hexId = todos[1]._id.toHexString();
+        var postParams = {text: "updated second string", completed: false};
+        request(app)
+            .patch(`/todos/${hexId}`)
+            .send(postParams)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe(postParams.text);
+                expect(res.body.todo.completed).toBe(false);
+                //expect(res.body.todo.completedAt).toNotExist();
+            })
+            .end(done);
+    });
 });
 */
