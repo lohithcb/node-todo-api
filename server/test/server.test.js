@@ -16,19 +16,14 @@ const todos = [{
 }];
 
 //this code is run before our test case starts
-//
-// beforeEach((done) => {
-//     Todo.remove({}).then(() => {
-//         return Todo.insertMany(todos);
-//     }).then(() => done());
-// });
-
-
-/*
+beforeEach((done) => {
+    Todo.remove({}).then(() => {
+        return Todo.insertMany(todos);
+    }).then(() => done());
+});
 describe('POST /todos', () => {
-
     it('should save todo', (done) => {
-        var text = 'Testing todos';
+        var text = 'this is first todo';
         request(app)
             .post('/todos')
             .send({text})
@@ -40,10 +35,9 @@ describe('POST /todos', () => {
                 if (err){
                     return done(err);
                 }
-
-                Todo.find({text}).then((todos) => {
-                    expect(todos.length).toBe(1);
-                    expect(todos[0].text).toBe(text);
+                Todo.find({text}).then((todo) => {
+                    expect(todo.length).toBe(1);
+                    expect(todo[0].text).toBe(text);
                     done();
                 }).catch((e) => done(e)); //ES6 expression syntax, without using parathesis
             });
@@ -58,12 +52,11 @@ describe('POST /todos', () => {
                 if (err){
                     return done(err);
                 }
-
                 Todo.find().then((res) => {
                     expect(res.length).toBe(2);
                     done();
                 }).catch((e) => done(e));
-            })
+            });
     });
 });
 
@@ -75,7 +68,7 @@ describe('GET /todos', () => {
             .expect((res) => {
                 expect(res.body.todos.length).toBe(2);
             })
-            .end(done());
+            .end(done);
     });
 });
 
@@ -104,14 +97,11 @@ describe('GET /todos/:id', () => {
             .expect(404)
             .end(done);
     });
-
 });
 
 describe('DELETE /todos/:id', () => {
-
     it('should delete the todo', (done) => {
         var hexId = todos[1]._id.toHexString();
-
         request(app)
             .delete(`/todos/${hexId}`)
             .expect(200)
@@ -144,7 +134,6 @@ describe('DELETE /todos/:id', () => {
             .expect(404)
             .end(done);
     });
-
 });
 
 describe('PATCH /todos/:id', () => {
@@ -178,4 +167,3 @@ describe('PATCH /todos/:id', () => {
             .end(done);
     });
 });
-*/

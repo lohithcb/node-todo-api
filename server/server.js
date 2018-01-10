@@ -1,3 +1,5 @@
+require('./config/config');
+
 const express = require('express');
 //boby-parser is a lib. which helps us to get the req. body data and convert it to object
 const bodyParser = require('body-parser');
@@ -9,7 +11,8 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 
-
+//setting PORT for heroku automatically
+const port = process.env.PORT;
 
 //creating a express application
 var app = express();
@@ -102,10 +105,6 @@ app.patch('/todos/:id', (req, res) => {
     });
 
 });
-
-
-//setting PORT for heroku automatically
-const port = process.env.PORT || '3025';
 
 app.listen(port, () => {
     console.log(`Server up in port ${port}`);
