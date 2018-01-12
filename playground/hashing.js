@@ -26,6 +26,7 @@ if (resultHash === tokens.hash){
 */
 
 //JSON Web Token JWT - standard method for authentication
+/*
 const jwt = require('jsonwebtoken');
 
 var data = {
@@ -38,3 +39,19 @@ console.log('Token:', token);
 //decode generated string
 var decode = jwt.verify(token, 'saltString');
 console.log('Decode:', decode);
+*/
+
+//bcryptjs
+const bcryptjs = require('bcryptjs');
+var password = 'lohithcb';
+
+// bcryptjs.genSalt(16, password, (err, res) => {
+//     bcryptjs.hash(password, res, (err, res) => {
+//         console.log('hashedPasswordh:', res);
+//     });
+// });
+
+var hashPassword = '$2a$16$2i0LcQyMrzOl0zYGEYVzVeRs2bruqrmqIrvsxKNDomgJV726oYJBa';
+bcryptjs.compare(password, hashPassword, (err, res) => {
+    console.log(res);
+});
