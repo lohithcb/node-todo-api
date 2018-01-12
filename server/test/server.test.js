@@ -2,25 +2,14 @@ const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
 
-var {app} = require('./../server');
-var {Todo} = require('./../models/todo');
-
-const todos = [{
-    _id: new ObjectID(),
-    text: 'this is first todo'
-}, {
-    _id: new ObjectID(),
-    text: 'this is second todo',
-    completed: true,
-    completedAt: 333
-}];
+const {app} = require('./../server');
+const {Todo} = require('./../models/todo');
+const {todos, populateTodos} = require('./seed/seed');
 
 //this code is run before our test case starts
-beforeEach((done) => {
-    Todo.remove({}).then(() => {
-        return Todo.insertMany(todos);
-    }).then(() => done());
-});
+beforeEach(populateTodos);
+
+/*
 describe('POST /todos', () => {
     it('should save todo', (done) => {
         var text = 'this is first todo';
@@ -167,3 +156,4 @@ describe('PATCH /todos/:id', () => {
             .end(done);
     });
 });
+*/
