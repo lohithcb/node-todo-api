@@ -40,7 +40,7 @@ var UserSchema = new mongoose.Schema({
     }]
 });
 
-//defining schema models, here fun is defined not as ES6 bcause it can't access "this" variable
+//defining schema instinct method, here fun is defined not as ES6 bcause it can't access "this" variable
 UserSchema.methods.generateAuthToken = function () {
     var user = this;
     var access = 'auth';
@@ -53,10 +53,30 @@ UserSchema.methods.generateAuthToken = function () {
         });
 };
 
+//instinct method
 UserSchema.methods.toJSON = function () {
     var user = this;
     var userObject = user.toObject();
     return _.pick(userObject, ['_id', 'email']);
+};
+
+//model method
+UserSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decode;
+
+    try {
+        decode = jwt.verify(token, 'lohithcb');
+    }catch (e){
+        return Promise.reject();
+    }
+
+    return User.findOne({
+        '_id': decode._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+
 };
 
 var User = mongoose.model('User', UserSchema);

@@ -10,6 +10,7 @@ const _ = require('lodash');
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
+var {authentication} = require('./middleware/authentication');
 
 //setting PORT for heroku automatically
 const port = process.env.PORT;
@@ -126,6 +127,11 @@ app.post('/users', (req, res) => {
     }).catch((e) => {
         res.status(400).send(e);
     });
+});
+
+//GET /users/me
+app.get('/users/me', authentication, (req, res) =>{
+    res.send(req.user);
 });
 
 app.listen(port, () => {
